@@ -1,0 +1,20 @@
+{
+    "asset": "2c0b4d3957133d94aa20219f9a84743c",
+    "fileName": "019b1813-94e0-7266-8caf-611f768cc9da.png",
+    "prompt": "A fantasy main character sprite, pixel art style, 32x32 pixel aesthetic. A hero character wearing knight armor with a red cape, holding a pixelated sword and shield. Helmet is off showing brown hair. Low resolution, 8-bit retro game look, clean transparent background.",
+    "negativePrompt": "blurry",
+    "model": "5b5b2af1-6ea4-4266-b087-cc9f3bf4f450",
+    "modelName": "Flux.1 Dev",
+    "customSeed": -1,
+    "w3CTraceId": "b0a283040df0a44332ee56c42186ec7f",
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0
+}
