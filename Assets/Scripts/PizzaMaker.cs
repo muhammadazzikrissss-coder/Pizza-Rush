@@ -1,16 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections; // Butuh ini untuk timer 10 detik
+using System.Collections;
 
 public class PizzaMaker : MonoBehaviour
 {
     [Header("Sprite Referensi")]
-    public Sprite spriteDough;      // Adonan Bulat
-    public Sprite spriteFlat;       // Adonan Gepeng
-    public Sprite spriteSauce;      // + Saus
-    public Sprite spriteCheese;     // + Keju
-    public Sprite spritePepperoni;  // + Paperoni
-    public Sprite spriteVeggie;     // + Sayur (Mentah Siap Bake)
+    public Sprite spriteDough;
+    public Sprite spriteFlat;
+    public Sprite spriteSauce;
+    public Sprite spriteCheese;
+    public Sprite spritePepperoni;
+    public Sprite spriteVeggie;
     public Sprite spriteBaked;
 
     [Header("Komponen UI")]
@@ -20,36 +20,58 @@ public class PizzaMaker : MonoBehaviour
     public Button btnVeggie;
     public Button btnBake;
     public Button btnSell;
-    public Text textStatus; // Opsional: Buat nampilin tulisan "Baking..."
+    public Text textStatus;
+
+    [Header("Audio Settings")]
+    public AudioSource sourceSuara;
+    public AudioClip sfxKaching;    // Suara Uang
+    public AudioClip sfxBaking;     // --- TAMBAHAN BARU: Suara Adonan ---
 
     private SpriteRenderer rend;
-    private int doughClicks = 0; // Berapa kali adonan diklik
+    private int doughClicks = 0;
     private bool isBaking = false;
 
-    // Status Pizza Kita
     private enum State { Dough, Flat, Sauced, Cheesed, Pepperoni, Veggie, Baked }
     private State currentState;
 
     void Start()
     {
         rend = GetComponent<SpriteRenderer>();
+
+        if (sourceSuara == null)
+            sourceSuara = GetComponent<AudioSource>();
+
         ResetPizza();
     }
 
-    // 1. Fungsi Klik Adonan (Dipanggil saat object diklik mouse)
+    // 1. Fungsi Klik Adonan
     void OnMouseDown()
     {
         if (currentState == State.Dough)
         {
+            // --- TAMBAHAN BARU: Mainkan Suara Tumbuk ---
+            if (sourceSuara != null && sfxBaking != null)
+            {
+                // Kita random sedikit pitch-nya biar suaranya tidak monoton kalau diklik cepat
+                sourceSuara.pitch = Random.Range(0.8f, 1.2f);
+                sourceSuara.PlayOneShot(sfxBaking);
+            }
+            // -------------------------------------------
+
             doughClicks++;
-            // Efek visual dikit: Adonan mengecil pas diklik lalu balik lagi
+
+            // Efek visual
             transform.localScale = Vector3.one * 0.9f;
             Invoke("ResetScale", 0.1f);
 
-            if (doughClicks >= 3) // Misal harus diklik 3 kali baru gepeng
+            if (doughClicks >= 3)
             {
                 currentState = State.Flat;
                 rend.sprite = spriteFlat;
+
+                // Balikin pitch ke normal setelah adonan jadi gepeng
+                if (sourceSuara != null) sourceSuara.pitch = 1f;
+
                 UpdateUI();
             }
         }
@@ -98,7 +120,7 @@ public class PizzaMaker : MonoBehaviour
         }
     }
 
-    // 3. Fungsi Bake (Masak)
+    // 3. Fungsi Bake
     public void BakePizza()
     {
         if (currentState == State.Veggie && !isBaking)
@@ -114,19 +136,12 @@ public class PizzaMaker : MonoBehaviour
 
         if (textStatus != null) textStatus.text = "Sedang Memanggang...";
 
-        // Tunggu 10 detik
         yield return new WaitForSeconds(5f);
 
-        // --- UPDATE DI SINI ---
         currentState = State.Baked;
         isBaking = false;
-
-        // Ganti gambar jadi Pizza Matang
         rend.sprite = spriteBaked;
-
-        // Pastikan warnanya putih terang (normal)
         rend.color = Color.white;
-        // ----------------------
 
         if (textStatus != null) textStatus.text = "MATANG! Siap Jual";
         UpdateUI();
@@ -137,10 +152,18 @@ public class PizzaMaker : MonoBehaviour
     {
         if (currentState == State.Baked)
         {
-            // Panggil GameManager untuk usir NPC dan catat penjualan
-            GameManager.instance.TombolJualDitekan();
+            if (sourceSuara != null && sfxKaching != null)
+            {
+                // Pastikan pitch normal untuk suara uang
+                sourceSuara.pitch = 1f;
+                sourceSuara.PlayOneShot(sfxKaching);
+            }
 
-            // Ulangi proses bikin pizza dari awal
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.TombolJualDitekan();
+            }
+
             ResetPizza();
         }
     }
@@ -149,25 +172,25 @@ public class PizzaMaker : MonoBehaviour
     {
         currentState = State.Dough;
         rend.sprite = spriteDough;
-        rend.color = Color.white; // Balikin warna jadi terang
+        rend.color = Color.white;
         doughClicks = 0;
+
+        // Reset pitch jaga-jaga
+        if (sourceSuara != null) sourceSuara.pitch = 1f;
 
         if (textStatus != null) textStatus.text = "Ketuk Adonan!";
         UpdateUI();
     }
 
-    // Mengatur Tombol mana yang boleh ditekan
     void UpdateUI()
     {
-        // Matikan semua dulu
         btnSauce.interactable = false;
         btnCheese.interactable = false;
         btnPepperoni.interactable = false;
         btnVeggie.interactable = false;
         btnBake.interactable = false;
-        btnSell.gameObject.SetActive(false); // Tombol jual hilang kalau belum matang
+        btnSell.gameObject.SetActive(false);
 
-        // Nyalakan sesuai urutan
         if (currentState == State.Flat) btnSauce.interactable = true;
         else if (currentState == State.Sauced) btnCheese.interactable = true;
         else if (currentState == State.Cheesed) btnPepperoni.interactable = true;

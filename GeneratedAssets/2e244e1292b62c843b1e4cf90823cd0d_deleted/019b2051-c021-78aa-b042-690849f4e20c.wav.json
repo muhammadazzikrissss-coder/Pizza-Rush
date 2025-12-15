@@ -1,0 +1,13 @@
+{
+    "asset": "2e244e1292b62c843b1e4cf90823cd0d",
+    "fileName": "019b2051-c021-78aa-b042-690849f4e20c.wav",
+    "prompt": "Generate suara menumbuk adonan",
+    "negativePrompt": "halus",
+    "model": "7df9b85a-1695-49f7-89bf-988208d5a3bc",
+    "modelName": "Meta MusicGen",
+    "customSeed": -1,
+    "w3CTraceId": "eb43e33392fa8dfce4cda498b54523ad",
+    "duration": 10.0,
+    "autoTrim": false,
+    "hasReference": false
+}

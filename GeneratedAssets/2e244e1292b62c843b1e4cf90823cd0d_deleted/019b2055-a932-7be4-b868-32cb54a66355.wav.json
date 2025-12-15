@@ -1,0 +1,13 @@
+{
+    "asset": "2e244e1292b62c843b1e4cf90823cd0d",
+    "fileName": "019b2055-a932-7be4-b868-32cb54a66355.wav",
+    "prompt": "Generate suara menumbuk adonan, cukup 1 detik aja",
+    "negativePrompt": "",
+    "model": "5de0686a-fb27-40e5-9df0-28ae810d70ca",
+    "modelName": "ElevenLabs Sound Effects V2",
+    "customSeed": -1,
+    "w3CTraceId": "fbaa12d75ebe237b5f28d080b9492e6b",
+    "duration": 1.0,
+    "autoTrim": true,
+    "hasReference": false
+}

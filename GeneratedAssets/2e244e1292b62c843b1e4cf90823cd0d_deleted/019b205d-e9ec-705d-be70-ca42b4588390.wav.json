@@ -1,0 +1,13 @@
+{
+    "asset": "2e244e1292b62c843b1e4cf90823cd0d",
+    "fileName": "019b205d-e9ec-705d-be70-ca42b4588390.wav",
+    "prompt": "generate suara uang *cecing* ",
+    "negativePrompt": "nosie, music",
+    "model": "5de0686a-fb27-40e5-9df0-28ae810d70ca",
+    "modelName": "ElevenLabs Sound Effects V2",
+    "customSeed": -1,
+    "w3CTraceId": "270918017badb48e81054d808b51fbfb",
+    "duration": 1.0,
+    "autoTrim": true,
+    "hasReference": false
+}
