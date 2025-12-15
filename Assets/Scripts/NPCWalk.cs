@@ -4,62 +4,54 @@ public class NPCWalk : MonoBehaviour
 {
     [Header("Settings")]
     public float kecepatan = 2f;
-    public float jarakAntrian = 1.5f; // Jarak aman antrian
-    public LayerMask layerTeman;      // Layer khusus NPC
+    public float jarakAntrian = 1.5f;
+    public LayerMask layerTeman;
 
     [Header("Components")]
     public GameObject orderBubble;
-
     private Rigidbody2D rb;
+    private Animator anim; // <-- TAMBAHAN 1: Variabel Animator
+
     private bool sedangPesan = false;
-    private Collider2D myCollider; // Collider sendiri biar gak kena scan
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        myCollider = GetComponent<Collider2D>(); // Ambil collider sendiri
+        anim = GetComponent<Animator>(); // <-- TAMBAHAN 2: Ambil komponen Animator
 
         if (orderBubble != null) orderBubble.SetActive(false);
     }
 
     void FixedUpdate()
     {
-        // --- PERBAIKAN DI SINI ---
-
-        // Kita geser titik mulai laser sedikit ke kanan (misal 0.5 unit)
-        // Sesuaikan angka 0.5f ini dengan lebar spritemu
+        // ... (KODE RAYCAST MAJU SEDIKIT YANG KEMARIN TETAP DISINI) ...
         Vector2 posisiAwal = (Vector2)transform.position + (Vector2.right * 0.5f);
-        Vector2 arah = Vector2.right;
+        RaycastHit2D hit = Physics2D.Raycast(posisiAwal, Vector2.right, jarakAntrian, layerTeman);
+        bool adaTeman = (hit.collider != null);
+        // ...
 
-        // Tembak laser
-        RaycastHit2D hit = Physics2D.Raycast(posisiAwal, arah, jarakAntrian, layerTeman);
-
-        // Gambar garis debug (Merah = Laser) biar kelihatan di Scene
-        Debug.DrawRay(posisiAwal, arah * jarakAntrian, Color.red);
-
-        bool adaTeman = false;
-
-        if (hit.collider != null)
-        {
-            // Karena start laser sudah dimajukan, kita gak perlu cek diri sendiri lagi
-            // Asalkan yang kena itu Layer NPC, berarti itu teman
-            adaTeman = true;
-        }
-
-        // --- AKHIR PERBAIKAN ---
-
-        // Logika Gerak (Sama seperti sebelumnya)
+        // Logika Gerak
         if (sedangPesan || adaTeman)
         {
-            rb.linearVelocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero; // Stop
         }
         else
         {
-            rb.linearVelocity = new Vector2(kecepatan, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(kecepatan, rb.linearVelocity.y); // Jalan
         }
-    }
 
-    // ... (kode atas tetap sama) ...
+        // --- TAMBAHAN 3: Update Animasi berdasarkan kecepatan ---
+        // Kalau kecepatan horizontalnya lebih dari 0.1 (artinya bergerak)
+        if (Mathf.Abs(rb.linearVelocity.x) > 0.1f)
+        {
+            anim.SetBool("isWalking", true); // Kirim sinyal jalan ke Animator
+        }
+        else
+        {
+            anim.SetBool("isWalking", false); // Kirim sinyal diam
+        }
+        // ---------------------------------------------------------
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -87,6 +79,4 @@ public class NPCWalk : MonoBehaviour
         // Opsional: Matikan collider sebentar biar gak dideteksi teman di belakang
         // Tapi logic Raycast kita sebelumnya sudah cukup aman kok.
     }
-
-    // ... (Sisa kode tetap sama) ...
 }
