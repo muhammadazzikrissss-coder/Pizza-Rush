@@ -13,6 +13,10 @@ public class PizzaMaker : MonoBehaviour
     public Sprite spriteVeggie;
     public Sprite spriteBaked;
 
+    [Header("VFX Settings")]
+    // --- [BARU] Slot untuk memasukkan Prefab VFX Debu ---
+    public GameObject vfxDebuPrefab;
+
     [Header("Komponen UI")]
     public Button btnSauce;
     public Button btnCheese;
@@ -24,8 +28,8 @@ public class PizzaMaker : MonoBehaviour
 
     [Header("Audio Settings")]
     public AudioSource sourceSuara;
-    public AudioClip sfxKaching;    // Suara Uang
-    public AudioClip sfxBaking;     // --- TAMBAHAN BARU: Suara Adonan ---
+    public AudioClip sfxKaching;
+    public AudioClip sfxBaking;
 
     private SpriteRenderer rend;
     private int doughClicks = 0;
@@ -49,27 +53,31 @@ public class PizzaMaker : MonoBehaviour
     {
         if (currentState == State.Dough)
         {
-            // --- TAMBAHAN BARU: Mainkan Suara Tumbuk ---
             if (sourceSuara != null && sfxBaking != null)
             {
-                // Kita random sedikit pitch-nya biar suaranya tidak monoton kalau diklik cepat
                 sourceSuara.pitch = Random.Range(0.8f, 1.2f);
                 sourceSuara.PlayOneShot(sfxBaking);
             }
-            // -------------------------------------------
 
             doughClicks++;
 
-            // Efek visual
+            // Efek visual (membal)
             transform.localScale = Vector3.one * 0.9f;
             Invoke("ResetScale", 0.1f);
 
+            // Cek jika sudah diklik 3 kali
             if (doughClicks >= 3)
             {
+                // --- [BARU] Munculkan VFX Debu di sini (Pas berubah jadi Flat) ---
+                if (vfxDebuPrefab != null)
+                {
+                    Instantiate(vfxDebuPrefab, transform.position, Quaternion.identity);
+                }
+                // -------------------------------------------------------------
+
                 currentState = State.Flat;
                 rend.sprite = spriteFlat;
 
-                // Balikin pitch ke normal setelah adonan jadi gepeng
                 if (sourceSuara != null) sourceSuara.pitch = 1f;
 
                 UpdateUI();
@@ -79,123 +87,15 @@ public class PizzaMaker : MonoBehaviour
 
     void ResetScale() { transform.localScale = Vector3.one; }
 
-    // 2. Fungsi Tombol Topping
-    public void AddSauce()
-    {
-        if (currentState == State.Flat)
-        {
-            currentState = State.Sauced;
-            rend.sprite = spriteSauce;
-            UpdateUI();
-        }
-    }
+    // ... (Sisa kode ke bawah TIDAK PERLU DIUBAH, biarkan sama persis seperti aslinya)
 
-    public void AddCheese()
-    {
-        if (currentState == State.Sauced)
-        {
-            currentState = State.Cheesed;
-            rend.sprite = spriteCheese;
-            UpdateUI();
-        }
-    }
-
-    public void AddPepperoni()
-    {
-        if (currentState == State.Cheesed)
-        {
-            currentState = State.Pepperoni;
-            rend.sprite = spritePepperoni;
-            UpdateUI();
-        }
-    }
-
-    public void AddVeggie()
-    {
-        if (currentState == State.Pepperoni)
-        {
-            currentState = State.Veggie;
-            rend.sprite = spriteVeggie;
-            UpdateUI();
-        }
-    }
-
-    // 3. Fungsi Bake
-    public void BakePizza()
-    {
-        if (currentState == State.Veggie && !isBaking)
-        {
-            StartCoroutine(ProsesMasak());
-        }
-    }
-
-    IEnumerator ProsesMasak()
-    {
-        isBaking = true;
-        btnBake.interactable = false;
-
-        if (textStatus != null) textStatus.text = "Sedang Memanggang...";
-
-        yield return new WaitForSeconds(5f);
-
-        currentState = State.Baked;
-        isBaking = false;
-        rend.sprite = spriteBaked;
-        rend.color = Color.white;
-
-        if (textStatus != null) textStatus.text = "MATANG! Siap Jual";
-        UpdateUI();
-    }
-
-    // 4. Fungsi Jual
-    public void JualPizza()
-    {
-        if (currentState == State.Baked)
-        {
-            if (sourceSuara != null && sfxKaching != null)
-            {
-                // Pastikan pitch normal untuk suara uang
-                sourceSuara.pitch = 1f;
-                sourceSuara.PlayOneShot(sfxKaching);
-            }
-
-            if (GameManager.instance != null)
-            {
-                GameManager.instance.TombolJualDitekan();
-            }
-
-            ResetPizza();
-        }
-    }
-
-    void ResetPizza()
-    {
-        currentState = State.Dough;
-        rend.sprite = spriteDough;
-        rend.color = Color.white;
-        doughClicks = 0;
-
-        // Reset pitch jaga-jaga
-        if (sourceSuara != null) sourceSuara.pitch = 1f;
-
-        if (textStatus != null) textStatus.text = "Ketuk Adonan!";
-        UpdateUI();
-    }
-
-    void UpdateUI()
-    {
-        btnSauce.interactable = false;
-        btnCheese.interactable = false;
-        btnPepperoni.interactable = false;
-        btnVeggie.interactable = false;
-        btnBake.interactable = false;
-        btnSell.gameObject.SetActive(false);
-
-        if (currentState == State.Flat) btnSauce.interactable = true;
-        else if (currentState == State.Sauced) btnCheese.interactable = true;
-        else if (currentState == State.Cheesed) btnPepperoni.interactable = true;
-        else if (currentState == State.Pepperoni) btnVeggie.interactable = true;
-        else if (currentState == State.Veggie) btnBake.interactable = true;
-        else if (currentState == State.Baked) btnSell.gameObject.SetActive(true);
-    }
+    public void AddSauce() { /* ... kode lama ... */ if (currentState == State.Flat) { currentState = State.Sauced; rend.sprite = spriteSauce; UpdateUI(); } }
+    public void AddCheese() { /* ... kode lama ... */ if (currentState == State.Sauced) { currentState = State.Cheesed; rend.sprite = spriteCheese; UpdateUI(); } }
+    public void AddPepperoni() { /* ... kode lama ... */ if (currentState == State.Cheesed) { currentState = State.Pepperoni; rend.sprite = spritePepperoni; UpdateUI(); } }
+    public void AddVeggie() { /* ... kode lama ... */ if (currentState == State.Pepperoni) { currentState = State.Veggie; rend.sprite = spriteVeggie; UpdateUI(); } }
+    public void BakePizza() { /* ... kode lama ... */ if (currentState == State.Veggie && !isBaking) { StartCoroutine(ProsesMasak()); } }
+    IEnumerator ProsesMasak() { /* ... kode lama ... */ isBaking = true; btnBake.interactable = false; if (textStatus != null) textStatus.text = "Sedang Memanggang..."; yield return new WaitForSeconds(5f); currentState = State.Baked; isBaking = false; rend.sprite = spriteBaked; rend.color = Color.white; if (textStatus != null) textStatus.text = "MATANG! Siap Jual"; UpdateUI(); }
+    public void JualPizza() { /* ... kode lama ... */ if (currentState == State.Baked) { if (sourceSuara != null && sfxKaching != null) { sourceSuara.pitch = 1f; sourceSuara.PlayOneShot(sfxKaching); } if (GameManager.instance != null) { GameManager.instance.TombolJualDitekan(); } ResetPizza(); } }
+    void ResetPizza() { /* ... kode lama ... */ currentState = State.Dough; rend.sprite = spriteDough; rend.color = Color.white; doughClicks = 0; if (sourceSuara != null) sourceSuara.pitch = 1f; if (textStatus != null) textStatus.text = "Ketuk Adonan!"; UpdateUI(); }
+    void UpdateUI() { /* ... kode lama ... */ btnSauce.interactable = false; btnCheese.interactable = false; btnPepperoni.interactable = false; btnVeggie.interactable = false; btnBake.interactable = false; btnSell.gameObject.SetActive(false); if (currentState == State.Flat) btnSauce.interactable = true; else if (currentState == State.Sauced) btnCheese.interactable = true; else if (currentState == State.Cheesed) btnPepperoni.interactable = true; else if (currentState == State.Pepperoni) btnVeggie.interactable = true; else if (currentState == State.Veggie) btnBake.interactable = true; else if (currentState == State.Baked) btnSell.gameObject.SetActive(true); }
 }
