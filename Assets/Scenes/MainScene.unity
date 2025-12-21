@@ -1479,7 +1479,7 @@ MonoBehaviour:
   spritePepperoni: {fileID: 895330121231455120, guid: 5038e485de8101b4da86d612ed59e7af, type: 3}
   spriteVeggie: {fileID: -1555123000991949409, guid: e1595351794d4884a9bda2d9ad0cc085, type: 3}
   spriteBaked: {fileID: 6048862160296339182, guid: b6e6c6664b509ec4ca416eba8c135d3a, type: 3}
-  vfxDebuPrefab: {fileID: 3986322089051751458, guid: 83bcb1a0ebd1ece47be64f47a9c49ee8, type: 3}
+  vfxDebuPrefab: {fileID: 4419701332603461596, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
   btnSauce: {fileID: 327943476}
   btnCheese: {fileID: 723416118}
   btnPepperoni: {fileID: 38785185}
@@ -1604,7 +1604,7 @@ Transform:
   m_GameObject: {fileID: 387273130}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.06, y: -0.96, z: 0}
+  m_LocalPosition: {x: -0.06, y: -1.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5242,6 +5242,67 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 83bcb1a0ebd1ece47be64f47a9c49ee8, type: 3}
+--- !u!1001 &9009761211273306764
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1357238562733982833, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623766707692486104, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -16.42134
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623766707692486104, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4.1355953
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623766707692486104, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623766707692486104, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623766707692486104, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623766707692486104, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623766707692486104, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623766707692486104, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623766707692486104, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623766707692486104, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4419701332603461596, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
+      propertyPath: m_Name
+      value: VFXPoof3_0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: abc2a5958bd1a4b4798ee897183a7e4d, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -5262,3 +5323,4 @@ SceneRoots:
   - {fileID: 1807859298}
   - {fileID: 821982823}
   - {fileID: 7637535328615317864}
+  - {fileID: 9009761211273306764}
